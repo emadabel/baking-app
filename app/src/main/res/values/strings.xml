@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Baking Time</string>
+    <string name="invalid_error_message">Something went wrong and can not processing the data</string>
+</resources>
