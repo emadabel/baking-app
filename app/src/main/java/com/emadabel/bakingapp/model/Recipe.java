@@ -5,10 +5,6 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-/**
- * Created by Emad on 04/05/2018.
- */
-
 public class Recipe implements Parcelable {
 
     public final static Parcelable.Creator<Recipe> CREATOR = new Creator<Recipe>() {

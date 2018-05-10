@@ -3,10 +3,6 @@ package com.emadabel.bakingapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Emad on 04/05/2018.
- */
-
 public class Ingredient implements Parcelable {
 
     final static Parcelable.Creator<Ingredient> CREATOR = new Creator<Ingredient>() {

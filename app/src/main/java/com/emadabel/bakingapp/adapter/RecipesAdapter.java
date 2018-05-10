@@ -15,10 +15,6 @@ import com.emadabel.bakingapp.utils.Utilities;
 
 import java.util.List;
 
-/**
- * Created by Emad on 04/05/2018.
- */
-
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder> {
 
     private OnViewHolderClickListener mViewHolderClickListener;
