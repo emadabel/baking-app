@@ -1,5 +1,6 @@
 package com.emadabel.bakingapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -57,6 +58,11 @@ public class MainActivity extends AppCompatActivity implements RecipesDownloader
             @Override
             public void onClick(Recipe recipe) {
                 Toast.makeText(MainActivity.this, recipe.getName(), Toast.LENGTH_SHORT).show();
+                Bundle b = new Bundle();
+                b.putParcelable(DetailsActivity.RECIPE_DETAIL, recipe);
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                intent.putExtras(b);
+                startActivity(intent);
             }
         });
 

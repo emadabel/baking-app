@@ -28,8 +28,8 @@ public class Recipe implements Parcelable {
     private Recipe(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
-        in.readTypedList(this.ingredients, Ingredient.CREATOR);
-        in.readTypedList(this.steps, Step.CREATOR);
+        this.ingredients = in.createTypedArrayList(Ingredient.CREATOR);
+        this.steps = in.createTypedArrayList(Step.CREATOR);
         this.servings = in.readInt();
         this.image = in.readString();
     }
