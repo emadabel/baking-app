@@ -22,13 +22,8 @@ public class RecipesDownloader {
 
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/";
 
-    public interface DelayerCallback {
-        void onSuccess(ArrayList<Recipe> recipes);
-        void onFailure();
-    }
-
     public static void downloadRecipes(Context context, final DelayerCallback callback,
-                                @Nullable final SimpleIdlingResource idlingResource) {
+                                       @Nullable final SimpleIdlingResource idlingResource) {
 
         if (idlingResource != null) {
             idlingResource.setIdleState(false);
@@ -79,5 +74,11 @@ public class RecipesDownloader {
                 t.printStackTrace();
             }
         });
+    }
+
+    public interface DelayerCallback {
+        void onSuccess(ArrayList<Recipe> recipes);
+
+        void onFailure();
     }
 }

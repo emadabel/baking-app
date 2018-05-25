@@ -15,6 +15,9 @@ import com.emadabel.bakingapp.utils.Utilities;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder> {
 
     private OnViewHolderClickListener mViewHolderClickListener;
@@ -65,15 +68,16 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
     public class RecipesViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        final ImageView mRecipePosterImageView;
-        final TextView mRecipeTitleTextView;
-        final TextView mServingsTextView;
+        @BindView(R.id.recipe_poster_iv)
+        ImageView mRecipePosterImageView;
+        @BindView(R.id.recipe_title_tv)
+        TextView mRecipeTitleTextView;
+        @BindView(R.id.servings_tv)
+        TextView mServingsTextView;
 
         RecipesViewHolder(View itemView) {
             super(itemView);
-            mRecipePosterImageView = itemView.findViewById(R.id.recipe_poster_iv);
-            mRecipeTitleTextView = itemView.findViewById(R.id.recipe_title_tv);
-            mServingsTextView = itemView.findViewById(R.id.servings_tv);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 

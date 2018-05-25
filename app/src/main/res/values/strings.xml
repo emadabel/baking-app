@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Baking Time</string>
     <string name="invalid_error_message">Something went wrong and can not processing the data</string>
+    <string name="ingredient_detail">%1$s %2$s</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

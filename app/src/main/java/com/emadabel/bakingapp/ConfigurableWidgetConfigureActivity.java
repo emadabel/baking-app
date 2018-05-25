@@ -1,19 +1,17 @@
 package com.emadabel.bakingapp;
 
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
-import com.emadabel.bakingapp.IdlingResource.SimpleIdlingResource;
 import com.emadabel.bakingapp.adapter.RecipesAdapter;
 import com.emadabel.bakingapp.api.RecipesDownloader;
 import com.emadabel.bakingapp.model.Recipe;
@@ -23,9 +21,14 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements RecipesDownloader.DelayerCallback {
+public class ConfigurableWidgetConfigureActivity extends AppCompatActivity implements RecipesDownloader.DelayerCallback {
 
     private static final String RECIPE_LIST_KEY = "recipe_list_key";
+
+    int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+
+    private AppWidgetManager widgetManager;
+    private RemoteViews views;
 
     @BindView(R.id.recipe_list_rv)
     RecyclerView mRecipeListRecyclerView;
@@ -39,35 +42,13 @@ public class MainActivity extends AppCompatActivity implements RecipesDownloader
     RecipesAdapter recipesAdapter;
     ArrayList<Recipe> recipeList;
 
-    @Nullable
-    private SimpleIdlingResource mIdlingResource;
-
-    @VisibleForTesting
-    @NonNull
-    public IdlingResource getIdlingResource() {
-        if (mIdlingResource == null) {
-            mIdlingResource = new SimpleIdlingResource();
-        }
-        return mIdlingResource;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_widget_configure);
         ButterKnife.bind(this);
 
         recipesAdapter = new RecipesAdapter();
-        recipesAdapter.setOnViewHolderClickListener(new RecipesAdapter.OnViewHolderClickListener() {
-            @Override
-            public void onClick(Recipe recipe) {
-                Bundle b = new Bundle();
-                b.putParcelable(RecipeDetailActivity.RECIPE_DETAIL, recipe);
-                Intent intent = new Intent(MainActivity.this, RecipeDetailActivity.class);
-                intent.putExtras(b);
-                startActivity(intent);
-            }
-        });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
@@ -75,11 +56,39 @@ public class MainActivity extends AppCompatActivity implements RecipesDownloader
         mRecipeListRecyclerView.setHasFixedSize(true);
         mRecipeListRecyclerView.setAdapter(recipesAdapter);
 
-        if (savedInstanceState != null) {
-            recipeList = savedInstanceState.getParcelableArrayList(RECIPE_LIST_KEY);
+        widgetManager = AppWidgetManager.getInstance(this);
+        views = new RemoteViews(this.getPackageName(), R.layout.recipe_widget_provider);
+        // Find the widget id from the intent.
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        }
+        if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            finish();
+            return;
         }
 
-        getIdlingResource();
+        recipesAdapter.setOnViewHolderClickListener(new RecipesAdapter.OnViewHolderClickListener() {
+            @Override
+            public void onClick(Recipe recipe) {
+                Bundle b = new Bundle();
+                b.putParcelable(RecipeDetailActivity.RECIPE_DETAIL, recipe);
+                Intent intent = new Intent(ConfigurableWidgetConfigureActivity.this, RecipeDetailActivity.class);
+                intent.putExtras(b);
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(ConfigurableWidgetConfigureActivity.this, 0, intent, 0);
+
+                views.setOnClickPendingIntent(R.id.appwidget_title_tv, pendingIntent);
+
+                widgetManager.updateAppWidget(mAppWidgetId, views);
+                Intent resultValue = new Intent();
+                // Set the results as expected from a 'configure activity'.
+                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                setResult(RESULT_OK, resultValue);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -100,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements RecipesDownloader
             mLoadingIndicatorPb.setVisibility(View.VISIBLE);
             mRecipeListRecyclerView.setVisibility(View.INVISIBLE);
         }
-        RecipesDownloader.downloadRecipes(this, MainActivity.this, mIdlingResource);
+        RecipesDownloader.downloadRecipes(this, ConfigurableWidgetConfigureActivity.this, null);
     }
 
     private void showRecipesData() {

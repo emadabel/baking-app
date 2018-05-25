@@ -1,6 +1,5 @@
 package com.emadabel.bakingapp;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.emadabel.bakingapp.adapter.MasterListAdapter;
+import com.emadabel.bakingapp.adapter.RecipeStepsAdapter;
 import com.emadabel.bakingapp.model.Ingredient;
 import com.emadabel.bakingapp.model.Recipe;
 import com.emadabel.bakingapp.model.Step;
@@ -21,17 +20,12 @@ import java.util.List;
 public class RecipeDetailFragment extends Fragment {
 
     private static final String RECIPE_DETAIL = "recipe_detail";
+    //OnListClickListener mCallback;
     private Step mStep;
     private List<Ingredient> mIngredients;
     private Recipe mRecipe;
 
-    OnListClickListener mCallback;
-
     public RecipeDetailFragment() {
-    }
-
-    public interface OnListClickListener {
-        void onTopicSelected(List<Ingredient> ingredients, Step step);
     }
 
     @Nullable
@@ -48,18 +42,18 @@ public class RecipeDetailFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-        MasterListAdapter adapter = new MasterListAdapter(mRecipe.getSteps(), mRecipe.getIngredients(),
-                new MasterListAdapter.MasterListOnClickHandler() {
-            @Override
-            public void onClick(Step step) {
-                mCallback.onTopicSelected(null, step);
-            }
+        RecipeStepsAdapter adapter = new RecipeStepsAdapter(mRecipe.getSteps(), mRecipe.getIngredients(),
+                new RecipeStepsAdapter.MasterListOnClickHandler() {
+                    @Override
+                    public void onClick(Step step) {
+                        //mCallback.onTopicSelected(null, step);
+                    }
 
-            @Override
-            public void onClick(List<Ingredient> ingredients) {
-                mCallback.onTopicSelected(ingredients, null);
-            }
-        });
+                    @Override
+                    public void onClick(List<Ingredient> ingredients) {
+                        //mCallback.onTopicSelected(ingredients, null);
+                    }
+                });
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -72,7 +66,7 @@ public class RecipeDetailFragment extends Fragment {
         this.mRecipe = recipe;
     }
 
-    @Override
+    /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
@@ -82,11 +76,15 @@ public class RecipeDetailFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnListClickListener");
         }
-    }
+    }*/
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(RECIPE_DETAIL, mRecipe);
     }
+
+    /*public interface OnListClickListener {
+        void onTopicSelected(List<Ingredient> ingredients, Step step);
+    }*/
 }

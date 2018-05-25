@@ -11,15 +11,15 @@
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/playerView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:visibility="visible"/>
+            android:layout_height="300dp"
+            android:visibility="visible" />
 
         <ImageView
             android:id="@+id/empty_player"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="300dp"
             android:background="@android:color/black"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
     </FrameLayout>
 
     <TextView
@@ -34,26 +34,4 @@
         android:scrollbars="vertical"
         android:text="Step description here"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/vertical_margin"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/previous_step_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Pervious Step" />
-
-        <Button
-            android:id="@+id/next_step_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Next Step" />
-
-    </LinearLayout>
 </LinearLayout>

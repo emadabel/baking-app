@@ -14,7 +14,7 @@ import com.emadabel.bakingapp.model.Step;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.RecipeStepsViewHolder> {
+public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.RecipeStepsViewHolder> {
 
     private MasterListOnClickHandler mClickHandler;
 
@@ -22,7 +22,7 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Re
     private List<Step> mSteps;
     private List<Ingredient> mIngredients;
 
-    public MasterListAdapter(List<Step> recipeStepList, List<Ingredient> ingredients, MasterListOnClickHandler clickHandler) {
+    public RecipeStepsAdapter(List<Step> recipeStepList, List<Ingredient> ingredients, MasterListOnClickHandler clickHandler) {
         this.mClickHandler = clickHandler;
         this.mSteps = recipeStepList;
         this.mIngredients = ingredients;
@@ -46,28 +46,29 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Re
     public void onBindViewHolder(@NonNull RecipeStepsViewHolder holder, int position) {
         String title = masterList.get(position);
 
-        holder.mRecipeStepDescriptionTextView.setText(title);
+        holder.mRecipeStepTitleTextView.setText(title);
     }
 
     @Override
     public int getItemCount() {
-        if (masterList == null)return 0;
+        if (masterList == null) return 0;
         return masterList.size();
     }
 
     public interface MasterListOnClickHandler {
         void onClick(Step step);
+
         void onClick(List<Ingredient> ingredients);
     }
 
     public class RecipeStepsViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        final TextView mRecipeStepDescriptionTextView;
+        final TextView mRecipeStepTitleTextView;
 
         public RecipeStepsViewHolder(View itemView) {
             super(itemView);
-            mRecipeStepDescriptionTextView = itemView.findViewById(R.id.recipe_step_description_tv);
+            mRecipeStepTitleTextView = itemView.findViewById(R.id.recipe_step_title_tv);
             itemView.setOnClickListener(this);
         }
 
