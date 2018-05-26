@@ -34,7 +34,6 @@
                 android:resource="@xml/recipe_widget_provider_info" />
         </receiver>
 
-        <activity android:name=".ConfigurableWidgetConfigureActivity"></activity>
     </application>
 
 </manifest>

@@ -59,5 +59,19 @@
             android:textColor="@android:color/white"
             app:layout_constraintBaseline_toBaselineOf="@+id/servings_title_tv"
             app:layout_constraintStart_toEndOf="@+id/servings_title_tv" />
+
+        <ImageView
+            android:id="@+id/add_widget_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:scaleType="fitXY"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/check_selector"
+            app:layout_constraintBottom_toBottomOf="@+id/servings_title_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recipe_title_tv" />
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>
