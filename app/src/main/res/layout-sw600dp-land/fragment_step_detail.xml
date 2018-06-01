@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/video_player_height">
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/playerView"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="match_parent"
             android:visibility="visible" />
 
         <ImageView
             android:id="@+id/empty_player"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="match_parent"
             android:background="@android:color/black"
+            android:contentDescription="@string/empty_player_desc"
             android:visibility="invisible" />
     </FrameLayout>
 
@@ -32,6 +34,6 @@
         android:layout_weight="1"
         android:scrollbarStyle="insideOverlay"
         android:scrollbars="vertical"
-        android:text="Step description here"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        tools:text="Step description here" />
 </LinearLayout>

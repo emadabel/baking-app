@@ -2,15 +2,14 @@
     android:id="@+id/widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
+    android:background="@color/widgetBackground"
     android:padding="@dimen/widget_margin">
 
     <TextView
         android:id="@+id/appwidget_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:background="#09C"
+        android:layout_margin="@dimen/vertical_margin"
         android:contentDescription="@string/appwidget_text"
         android:text="@string/appwidget_text"
         android:textColor="#ffffff"
@@ -19,8 +18,9 @@
 
     <TextView
         android:id="@+id/appwidget_ingredients_tv"
-        android:layout_below="@id/appwidget_title_tv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/appwidget_title_tv"
+        android:scrollbars="vertical" />
 
 </RelativeLayout>

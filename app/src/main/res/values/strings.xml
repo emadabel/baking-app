@@ -2,6 +2,17 @@
     <string name="app_name">Baking Time</string>
     <string name="invalid_error_message">Something went wrong and can not processing the data</string>
     <string name="ingredient_detail">%1$s %2$s</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
+    <string name="appwidget_text">Recipe name</string>
+    <string name="pref_widget_recipe" translatable="false">recipe</string>
+    <string name="no_favorite_widget">You do not have favorite recipe yet!</string>
+    <string name="add_widget_message">Set the recipe as a favorite widget</string>
+    <string name="ingredient_title">Ingredients</string>
+    <string name="steps_button_title">Go to steps</string>
+    <string name="previous_step_title">Previous Step</string>
+    <string name="next_step_title">Next Step</string>
+    <string name="serving_title">Servings:</string>
+    <string name="menu_add_widget_title">Add Widget</string>
+    <string name="empty_player_desc">There is no video for this step</string>
+    <string name="recipe_image_desc">Recipe poster</string>
+    <string name="servings_image_desc">Servings</string>
 </resources>

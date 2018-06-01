@@ -61,10 +61,8 @@ public class MainActivity extends AppCompatActivity implements RecipesDownloader
         recipesAdapter.setOnViewHolderClickListener(new RecipesAdapter.OnViewHolderClickListener() {
             @Override
             public void onClick(Recipe recipe) {
-                Bundle b = new Bundle();
-                b.putParcelable(RecipeDetailActivity.RECIPE_DETAIL, recipe);
                 Intent intent = new Intent(MainActivity.this, RecipeDetailActivity.class);
-                intent.putExtras(b);
+                intent.putExtra(RecipeDetailActivity.RECIPE_DETAIL, recipe);
                 startActivity(intent);
             }
         });

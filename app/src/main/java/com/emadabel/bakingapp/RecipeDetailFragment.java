@@ -1,5 +1,6 @@
 package com.emadabel.bakingapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,18 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.emadabel.bakingapp.adapter.RecipeStepsAdapter;
-import com.emadabel.bakingapp.model.Ingredient;
 import com.emadabel.bakingapp.model.Recipe;
-import com.emadabel.bakingapp.model.Step;
-
-import java.util.List;
 
 public class RecipeDetailFragment extends Fragment {
 
     private static final String RECIPE_DETAIL = "recipe_detail";
-    //OnListClickListener mCallback;
-    private Step mStep;
-    private List<Ingredient> mIngredients;
+    OnListClickListener mCallback;
+
     private Recipe mRecipe;
 
     public RecipeDetailFragment() {
@@ -38,20 +34,15 @@ public class RecipeDetailFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recipe_details_rv);
+        RecyclerView recyclerView = rootView.findViewById(R.id.recipe_details_rv);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-        RecipeStepsAdapter adapter = new RecipeStepsAdapter(mRecipe.getSteps(), mRecipe.getIngredients(),
+        RecipeStepsAdapter adapter = new RecipeStepsAdapter(mRecipe.getSteps(),
                 new RecipeStepsAdapter.MasterListOnClickHandler() {
                     @Override
-                    public void onClick(Step step) {
-                        //mCallback.onTopicSelected(null, step);
-                    }
-
-                    @Override
-                    public void onClick(List<Ingredient> ingredients) {
-                        //mCallback.onTopicSelected(ingredients, null);
+                    public void onClick(int position) {
+                        mCallback.onTopicSelected(position);
                     }
                 });
 
@@ -66,7 +57,7 @@ public class RecipeDetailFragment extends Fragment {
         this.mRecipe = recipe;
     }
 
-    /*@Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
@@ -76,7 +67,7 @@ public class RecipeDetailFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnListClickListener");
         }
-    }*/
+    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -84,7 +75,7 @@ public class RecipeDetailFragment extends Fragment {
         outState.putParcelable(RECIPE_DETAIL, mRecipe);
     }
 
-    /*public interface OnListClickListener {
-        void onTopicSelected(List<Ingredient> ingredients, Step step);
-    }*/
+    public interface OnListClickListener {
+        void onTopicSelected(int position);
+    }
 }

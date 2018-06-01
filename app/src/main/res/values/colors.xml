@@ -3,9 +3,7 @@
     <color name="colorPrimary">#9C27B0</color>
     <color name="colorPrimaryDark">#7B1FA2</color>
     <color name="colorAccent">#FFC107</color>
-    <color name="colorPrimaryLight">#E1BEE7</color>
-    <color name="textColorPrimary">#000000</color>
-    <color name="textColorSecondary">#757575</color>
     <color name="colorDivider">#BDBDBD</color>
     <color name="colorItemSelector">#60FF6D00</color>
+    <color name="widgetBackground">#09C</color>
 </resources>

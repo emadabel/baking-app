@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -11,6 +12,7 @@
         android:id="@+id/recipe_poster_iv"
         android:layout_width="match_parent"
         android:layout_height="180dp"
+        android:contentDescription="@string/recipe_image_desc"
         android:scaleType="centerCrop"
         android:src="@drawable/brownies" />
 
@@ -25,15 +27,16 @@
             android:id="@+id/recipe_title_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nutella pie"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            tools:text="Nutella pie" />
 
         <ImageView
             android:id="@+id/servings_icon_iv"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/serving_icon_dimension"
+            android:layout_height="@dimen/serving_icon_dimension"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:contentDescription="@string/servings_image_desc"
             android:src="@drawable/restaurant"
             app:layout_constraintTop_toBottomOf="@+id/recipe_title_tv" />
 
@@ -41,9 +44,9 @@
             android:id="@+id/servings_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:text="Servings:"
+            android:layout_marginLeft="@dimen/vertical_margin"
+            android:layout_marginStart="@dimen/vertical_margin"
+            android:text="@string/serving_title"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="@+id/servings_icon_iv"
             app:layout_constraintStart_toEndOf="@+id/servings_icon_iv"
@@ -53,25 +56,11 @@
             android:id="@+id/servings_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:text="8"
+            android:layout_marginLeft="@dimen/vertical_margin"
+            android:layout_marginStart="@dimen/vertical_margin"
             android:textColor="@android:color/white"
             app:layout_constraintBaseline_toBaselineOf="@+id/servings_title_tv"
-            app:layout_constraintStart_toEndOf="@+id/servings_title_tv" />
-
-        <ImageView
-            android:id="@+id/add_widget_iv"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:scaleType="fitXY"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/check_selector"
-            app:layout_constraintBottom_toBottomOf="@+id/servings_title_tv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/recipe_title_tv" />
+            app:layout_constraintStart_toEndOf="@+id/servings_title_tv"
+            tools:text="8" />
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

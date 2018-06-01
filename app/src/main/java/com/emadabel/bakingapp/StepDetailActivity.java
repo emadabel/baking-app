@@ -8,7 +8,8 @@ import android.view.MenuItem;
 import com.emadabel.bakingapp.model.Recipe;
 import com.emadabel.bakingapp.model.Step;
 
-public class StepDetailActivity extends AppCompatActivity implements StepDetailFragment.OnStepChangedListener {
+public class StepDetailActivity extends AppCompatActivity implements
+        StepDetailFragment.OnStepChangedListener, RecipeDetailFragment.OnListClickListener {
 
     private boolean mTwoPane;
     private Recipe mRecipe;
@@ -48,7 +49,7 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
             recipeDetailFragment.setMasterList(mRecipe);
 
             fragmentManager.beginTransaction()
-                    .add(R.id.recipe_detail_container, recipeDetailFragment)
+                    .replace(R.id.recipe_detail_container, recipeDetailFragment)
                     .commit();
         } else {
             mTwoPane = false;
@@ -73,5 +74,18 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
     @Override
     public void updateActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    public void onTopicSelected(int position) {
+        if (mTwoPane) {
+            StepDetailFragment stepDetailFragment = new StepDetailFragment();
+            stepDetailFragment.setStepList(mRecipe.getSteps());
+            stepDetailFragment.setListIndex(position);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.step_detail_container, stepDetailFragment)
+                    .commit();
+        }
     }
 }

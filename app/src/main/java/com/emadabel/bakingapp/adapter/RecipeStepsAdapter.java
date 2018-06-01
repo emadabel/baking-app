@@ -8,29 +8,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.emadabel.bakingapp.R;
-import com.emadabel.bakingapp.model.Ingredient;
 import com.emadabel.bakingapp.model.Step;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.RecipeStepsViewHolder> {
 
     private MasterListOnClickHandler mClickHandler;
 
-    private List<String> masterList;
     private List<Step> mSteps;
-    private List<Ingredient> mIngredients;
 
-    public RecipeStepsAdapter(List<Step> recipeStepList, List<Ingredient> ingredients, MasterListOnClickHandler clickHandler) {
+    public RecipeStepsAdapter(List<Step> recipeStepList, MasterListOnClickHandler clickHandler) {
         this.mClickHandler = clickHandler;
         this.mSteps = recipeStepList;
-        this.mIngredients = ingredients;
-        masterList = new ArrayList<>(recipeStepList.size() + 1);
-        masterList.add("Recipe Ingredients");
-        for (int i = 0; i < recipeStepList.size(); i++) {
-            masterList.add(recipeStepList.get(i).getShortDescription());
-        }
     }
 
     @NonNull
@@ -44,21 +34,19 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull RecipeStepsViewHolder holder, int position) {
-        String title = masterList.get(position);
+        String title = mSteps.get(position).getShortDescription();
 
         holder.mRecipeStepTitleTextView.setText(title);
     }
 
     @Override
     public int getItemCount() {
-        if (masterList == null) return 0;
-        return masterList.size();
+        if (mSteps == null) return 0;
+        return mSteps.size();
     }
 
     public interface MasterListOnClickHandler {
-        void onClick(Step step);
-
-        void onClick(List<Ingredient> ingredients);
+        void onClick(int position);
     }
 
     public class RecipeStepsViewHolder extends RecyclerView.ViewHolder
@@ -75,11 +63,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            if (adapterPosition == 0) {
-                mClickHandler.onClick(mIngredients);
-            } else {
-                mClickHandler.onClick(mSteps.get(adapterPosition - 1));
-            }
+            mClickHandler.onClick(adapterPosition);
         }
     }
 }

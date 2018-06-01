@@ -58,10 +58,8 @@ public class StepDetailFragment extends Fragment {
 
     @Nullable @BindView(R.id.previous_step_button)
     Button mPreviousStepButton;
-
-    private SimpleExoPlayer mExoPlayer;
-
     OnStepChangedListener mCallback;
+    private SimpleExoPlayer mExoPlayer;
     private Context mContext;
     private long playbackPosition;
     private int currentWindow;
@@ -70,10 +68,6 @@ public class StepDetailFragment extends Fragment {
     private List<Step> mSteps;
 
     public StepDetailFragment() {
-    }
-
-    public interface OnStepChangedListener {
-        void updateActionBarTitle(String title);
     }
 
     public void setStepList(List<Step> stepList) {
@@ -100,7 +94,7 @@ public class StepDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
         ButterKnife.bind(this, rootView);
 
-        /**
+        /*
          * reference: https://stackoverflow.com/questions/13877154/where-to-check-for-orientation-change-in-an-android-fragment
          */
         int currentOrientation = getResources().getConfiguration().orientation;
@@ -259,5 +253,9 @@ public class StepDetailFragment extends Fragment {
         currentState.putInt(CURRENT_WINDOW, currentWindow);
         currentState.putParcelableArrayList(STEP_LIST, new ArrayList<Parcelable>(mSteps));
         currentState.putInt(LIST_INDEX, mListIndex);
+    }
+
+    public interface OnStepChangedListener {
+        void updateActionBarTitle(String title);
     }
 }

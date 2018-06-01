@@ -2,10 +2,6 @@ package com.emadabel.bakingapp.utils;
 
 import com.emadabel.bakingapp.R;
 
-/**
- * Created by Emad on 04/05/2018.
- */
-
 public class Utilities {
 
     private static final String[] RECIPES_NAME = {
