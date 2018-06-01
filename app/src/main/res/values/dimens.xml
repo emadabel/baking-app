@@ -9,6 +9,8 @@
     <dimen name="steps_list_width">300dp</dimen>
     <dimen name="video_player_height">200dp</dimen>
     <dimen name="serving_icon_dimension">24dp</dimen>
+    <dimen name="buttonbar_height">48dp</dimen>
+    <dimen name="small_padding">4dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information

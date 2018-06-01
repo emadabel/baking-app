@@ -37,27 +37,56 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         tools:text="Step description here" />
 
-    <LinearLayout
+    <RelativeLayout
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/buttonbar_height"
         android:layout_margin="@dimen/vertical_margin"
         android:orientation="horizontal">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/small_padding"
+            android:layout_marginRight="@dimen/small_padding"
+            android:background="?android:attr/dividerVertical" />
+
+        <View
+            android:id="@+id/ViewColorPickerHelper"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/small_padding"
+            android:layout_marginTop="@dimen/small_padding"
+            android:background="?android:attr/dividerVertical" />
 
         <Button
             android:id="@+id/previous_step_button"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/ViewColorPickerHelper"
+            android:layout_toStartOf="@id/ViewColorPickerHelper"
             android:text="@string/previous_step_title" />
 
         <Button
             android:id="@+id/next_step_button"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@id/ViewColorPickerHelper"
+            android:layout_toRightOf="@id/ViewColorPickerHelper"
             android:text="@string/next_step_title" />
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
