@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.emadabel.bakingapp.model.Step;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -26,7 +27,6 @@ import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
@@ -39,12 +39,14 @@ import butterknife.ButterKnife;
 
 public class StepDetailFragment extends Fragment {
 
-    private static final String PLAYBACK_POSITION = "playback_position";
-    private static final String CURRENT_WINDOW = "current_window";
-    private static final String STEP_LIST = "step_list";
-    private static final String LIST_INDEX = "list_index";
+    private static final String KEY_AUTO_PLAY = "auto_play";
+    private static final String KEY_PLAYBACK_POSITION = "playback_position";
+    private static final String KEY_CURRENT_WINDOW = "current_window";
+    private static final String KEY_STEP_LIST = "step_list";
+    private static final String KEY_LIST_INDEX = "list_index";
 
-    @Nullable @BindView(R.id.step_description_tv)
+    @Nullable
+    @BindView(R.id.step_description_tv)
     TextView mStepDescriptionTextView;
 
     @BindView(R.id.playerView)
@@ -53,14 +55,21 @@ public class StepDetailFragment extends Fragment {
     @BindView(R.id.empty_player)
     ImageView mEmptyPlayer;
 
-    @Nullable @BindView(R.id.next_step_button)
+    @Nullable
+    @BindView(R.id.next_step_button)
     Button mNextStepButton;
 
-    @Nullable @BindView(R.id.previous_step_button)
+    @Nullable
+    @BindView(R.id.previous_step_button)
     Button mPreviousStepButton;
+
     OnStepChangedListener mCallback;
     private SimpleExoPlayer mExoPlayer;
+    private DefaultTrackSelector trackSelector;
+
     private Context mContext;
+
+    private boolean startAutoPlay;
     private long playbackPosition;
     private int currentWindow;
 
@@ -83,10 +92,13 @@ public class StepDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if (savedInstanceState != null) {
-            playbackPosition = savedInstanceState.getLong(PLAYBACK_POSITION);
-            currentWindow = savedInstanceState.getInt(CURRENT_WINDOW);
-            mSteps = savedInstanceState.getParcelableArrayList(STEP_LIST);
-            mListIndex = savedInstanceState.getInt(LIST_INDEX);
+            playbackPosition = savedInstanceState.getLong(KEY_PLAYBACK_POSITION);
+            currentWindow = savedInstanceState.getInt(KEY_CURRENT_WINDOW);
+            startAutoPlay = savedInstanceState.getBoolean(KEY_AUTO_PLAY);
+            mSteps = savedInstanceState.getParcelableArrayList(KEY_STEP_LIST);
+            mListIndex = savedInstanceState.getInt(KEY_LIST_INDEX);
+        } else {
+            clearStartPosition();
         }
 
         mContext = getContext();
@@ -110,9 +122,8 @@ public class StepDetailFragment extends Fragment {
             }
         }
 
-        if (mCallback != null) mCallback.updateActionBarTitle(mSteps.get(mListIndex).getShortDescription());
-
-        initializePlayer(Uri.parse(getVideoUrl()));
+        if (mCallback != null)
+            mCallback.updateActionBarTitle(mSteps.get(mListIndex).getShortDescription());
 
         if (mStepDescriptionTextView != null) {
             mStepDescriptionTextView.setText(mSteps.get(mListIndex).getDescription());
@@ -192,18 +203,21 @@ public class StepDetailFragment extends Fragment {
     private void initializePlayer(Uri mediaUri) {
         if (mExoPlayer == null) {
             // Create an instance of the ExoPlayer.
-            TrackSelector trackSelector = new DefaultTrackSelector();
+            trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
+            mExoPlayer.setPlayWhenReady(startAutoPlay);
             mPlayerView.setPlayer(mExoPlayer);
-            mExoPlayer.setPlayWhenReady(true);
         }
         // Prepare the MediaSource.
         String userAgent = Util.getUserAgent(mContext, "BakingTime");
         MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultHttpDataSourceFactory(userAgent),
                 new DefaultExtractorsFactory(), null, null);
-        mExoPlayer.prepare(mediaSource, true, false);
-        mExoPlayer.seekTo(currentWindow, playbackPosition);
+        boolean haveStartPosition = currentWindow != C.INDEX_UNSET;
+        if (haveStartPosition) {
+            mExoPlayer.seekTo(currentWindow, playbackPosition);
+        }
+        mExoPlayer.prepare(mediaSource, !haveStartPosition, false);
     }
 
     private void releasePlayer() {
@@ -225,34 +239,62 @@ public class StepDetailFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initializePlayer(Uri.parse(mSteps.get(mListIndex).getVideoURL()));
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        initializePlayer(Uri.parse(mSteps.get(mListIndex).getVideoURL()));
+        if (Util.SDK_INT <= 23 || mExoPlayer == null) {
+            initializePlayer(Uri.parse(mSteps.get(mListIndex).getVideoURL()));
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         if (mExoPlayer != null) {
-            playbackPosition = mExoPlayer.getCurrentPosition();
-            currentWindow = mExoPlayer.getCurrentWindowIndex();
-            mExoPlayer.stop();
+            updateStartPosition();
+        }
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
         }
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        releasePlayer();
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+    private void updateStartPosition() {
+        if (mExoPlayer != null) {
+            startAutoPlay = mExoPlayer.getPlayWhenReady();
+            currentWindow = mExoPlayer.getCurrentWindowIndex();
+            playbackPosition = mExoPlayer.getCurrentPosition();
+        }
+    }
+
+    private void clearStartPosition() {
+        startAutoPlay = true;
+        currentWindow = C.INDEX_UNSET;
+        playbackPosition = C.TIME_UNSET;
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle currentState) {
         super.onSaveInstanceState(currentState);
-        currentState.putLong(PLAYBACK_POSITION, playbackPosition);
-        currentState.putInt(CURRENT_WINDOW, currentWindow);
-        currentState.putParcelableArrayList(STEP_LIST, new ArrayList<Parcelable>(mSteps));
-        currentState.putInt(LIST_INDEX, mListIndex);
+        currentState.putBoolean(KEY_AUTO_PLAY, startAutoPlay);
+        currentState.putLong(KEY_PLAYBACK_POSITION, playbackPosition);
+        currentState.putInt(KEY_CURRENT_WINDOW, currentWindow);
+        currentState.putParcelableArrayList(KEY_STEP_LIST, new ArrayList<Parcelable>(mSteps));
+        currentState.putInt(KEY_LIST_INDEX, mListIndex);
     }
 
     public interface OnStepChangedListener {
