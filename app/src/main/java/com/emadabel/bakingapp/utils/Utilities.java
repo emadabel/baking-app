@@ -1,6 +1,15 @@
 package com.emadabel.bakingapp.utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.emadabel.bakingapp.R;
+import com.emadabel.bakingapp.model.Ingredient;
+import com.emadabel.bakingapp.model.Recipe;
+import com.google.gson.Gson;
+
+import java.util.List;
 
 public class Utilities {
 
@@ -23,5 +32,16 @@ public class Utilities {
         } else {
             return 0;
         }
+    }
+
+    public static List<Ingredient> getDataFromSharedPrefs(Context context) {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String recipeKey = context.getString(R.string.pref_widget_recipe);
+        String recipeJson = prefs.getString(recipeKey, null);
+
+        Recipe recipe = new Gson().fromJson(recipeJson, Recipe.class);
+
+        return recipe.getIngredients();
     }
 }

@@ -1,4 +1,4 @@
-package com.emadabel.bakingapp;
+package com.emadabel.bakingapp.widget;
 
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
+import com.emadabel.bakingapp.R;
 import com.emadabel.bakingapp.model.Recipe;
 import com.google.gson.Gson;
 
@@ -41,6 +42,8 @@ public class UpdatingWidgetService extends IntentService {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
                 int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidgetProvider.class));
                 RecipeWidgetProvider.updateRecipeWidgets(this, appWidgetManager, recipe, appWidgetIds);
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.appwidget_ingredients_lv);
+
             }
         }
     }

@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,11 +17,11 @@
         android:textSize="24sp"
         android:textStyle="bold|italic" />
 
-    <TextView
-        android:id="@+id/appwidget_ingredients_tv"
+    <ListView
+        android:id="@+id/appwidget_ingredients_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/appwidget_title_tv"
-        android:scrollbars="vertical" />
+        tools:listitem="@layout/widget_list_item" />
 
 </RelativeLayout>

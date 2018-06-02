@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class Step implements Parcelable {
 
-    final static Parcelable.Creator<Step> CREATOR = new Creator<Step>() {
+    public final static Parcelable.Creator<Step> CREATOR = new Creator<Step>() {
 
         public Step createFromParcel(Parcel in) {
             return new Step(in);

@@ -1,13 +1,16 @@
-package com.emadabel.bakingapp;
+package com.emadabel.bakingapp.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
-import com.emadabel.bakingapp.model.Ingredient;
+import com.emadabel.bakingapp.MainActivity;
+import com.emadabel.bakingapp.R;
+import com.emadabel.bakingapp.RecipeDetailActivity;
 import com.emadabel.bakingapp.model.Recipe;
 
 /**
@@ -22,24 +25,20 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
 
         if (recipe != null) {
-            Intent intent = new Intent(context, RecipeDetailActivity.class);
-            intent.putExtra(RecipeDetailActivity.RECIPE_DETAIL, recipe);
+            Intent appIntent = new Intent(context, RecipeDetailActivity.class);
+            appIntent.putExtra(RecipeDetailActivity.RECIPE_DETAIL, recipe);
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent =
+                    TaskStackBuilder.create(context)
+                            // add all of DetailsActivity's parents to the stack,
+                            // followed by DetailsActivity itself
+                            .addNextIntentWithParentStack(appIntent)
+                            .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
             views.setTextViewText(R.id.appwidget_title_tv, recipe.getName());
 
-            StringBuilder ingredients = new StringBuilder();
-            for (Ingredient ingredient : recipe.getIngredients()) {
-                ingredients.append(ingredient.getIngredient())
-                        .append(": ")
-                        .append(ingredient.getQuantity())
-                        .append(" ")
-                        .append(ingredient.getMeasure())
-                        .append("\n");
-            }
-
-            views.setTextViewText(R.id.appwidget_ingredients_tv, ingredients);
+            Intent intent = new Intent(context, ListViewWidgetService.class);
+            views.setRemoteAdapter(R.id.appwidget_ingredients_lv, intent);
 
             views.setOnClickPendingIntent(R.id.widget_container, pendingIntent);
         } else {

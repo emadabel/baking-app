@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.emadabel.bakingapp.adapter.IngredientAdapter;
 import com.emadabel.bakingapp.model.Recipe;
+import com.emadabel.bakingapp.widget.UpdatingWidgetService;
 import com.google.gson.Gson;
 
 import butterknife.BindView;
@@ -22,7 +24,7 @@ import butterknife.ButterKnife;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
-    static final String RECIPE_DETAIL = "recipe_detail";
+    public static final String RECIPE_DETAIL = "recipe_detail";
 
     @BindView(R.id.ingredients_rv)
     RecyclerView mIngredientsRecyclerView;
@@ -77,7 +79,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            onBackPressed();
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
         }
 
         if (id == R.id.action_add_to_widget) {
@@ -91,6 +94,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
             UpdatingWidgetService.startActionUpdateWidgets(this);
 
             Toast.makeText(this, getString(R.string.add_widget_message), Toast.LENGTH_SHORT).show();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
